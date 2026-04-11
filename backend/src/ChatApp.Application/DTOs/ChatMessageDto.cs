@@ -4,17 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChatApp.Domain.Entities;
+namespace ChatApp.Application.DTOs;
 
-public class Message
+public class ChatMessageDto
 {
-    public int Id { get; set; }
-
     public required string User { get; set; }
-
     public required string Text { get; set; }
-
     public DateTime CreatedAt { get; set; }
-
     public string? Sentiment { get; set; }
 }
