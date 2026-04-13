@@ -5,11 +5,10 @@ using ChatApp.Infrastructure.Persistence;
 using ChatApp.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;
+using Microsoft.Azure.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 const string FrontendCorsPolicy = "FrontendCorsPolicy";
-
-// Add services to the container.
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -21,7 +20,8 @@ builder.Services.AddDbContext<ChatDbContext>(options =>
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 builder.Services.AddScoped<IChatService, ChatService>();
 
-builder.Services.AddSignalR();
+builder.Services.AddSignalR()
+    .AddAzureSignalR();
 
 builder.Services.AddCors(options =>
 {
