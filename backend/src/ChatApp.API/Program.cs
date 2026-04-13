@@ -1,11 +1,13 @@
+using Azure;
+using Azure.AI.TextAnalytics;
 using ChatApp.API.Hubs;
 using ChatApp.Application.Interfaces;
 using ChatApp.Application.Services;
 using ChatApp.Infrastructure.Persistence;
 using ChatApp.Infrastructure.Repositories;
+using Microsoft.Azure.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System;
-using Microsoft.Azure.SignalR;
 
 var builder = WebApplication.CreateBuilder(args);
 const string FrontendCorsPolicy = "FrontendCorsPolicy";
@@ -28,13 +30,17 @@ builder.Services.AddCors(options =>
     options.AddPolicy(FrontendCorsPolicy, policy =>
     {
         policy.WithOrigins(
-                "http://localhost:5173",
                 "https://witty-glacier-0a0c95903.7.azurestaticapps.net")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
     });
 });
+
+builder.Services.AddSingleton(new TextAnalyticsClient(
+    new Uri(builder.Configuration["AzureAI:Endpoint"]!),
+    new AzureKeyCredential(builder.Configuration["AzureAI:Key"]!)
+));
 
 var app = builder.Build();
 
@@ -47,6 +53,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseCors(FrontendCorsPolicy);
+
+app.UseWebSockets();
 
 app.UseAuthorization();
 
