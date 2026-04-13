@@ -28,7 +28,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy(FrontendCorsPolicy, policy =>
     {
         policy.WithOrigins(
-                "http://localhost:5173")
+                "http://localhost:5173",
+                "https://witty-glacier-0a0c95903.7.azurestaticapps.net")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
